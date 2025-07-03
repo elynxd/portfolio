@@ -1,7 +1,9 @@
+import { format } from "date-fns";
+
 export function Footer() {
     return (
-        <footer className="bg-gray-900 p-4 text-center text-white">
-            <p>&copy; 2025 My Portfolio</p>
+        <footer className="p-4 text-center text-white">
+            <p>&copy; {format(new Date(), "yyyy")} Eliandro Viana</p>
         </footer>
     );
 }

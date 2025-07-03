@@ -41,9 +41,9 @@ export function Layout({ children }: { children: React.ReactNode }) {
                 <Meta />
                 <Links />
             </head>
-            <body className="flex min-h-screen flex-col bg-gray-900 text-white antialiased">
+            <body className="flex min-h-screen flex-col bg-background text-foreground antialiased dark:bg-background-dark dark:text-foreground-dark">
                 <Header />
-                <main className="flex-grow bg-gray-900">{children}</main>
+                <main className="flex-grow">{children}</main>
                 <Footer />
                 <ScrollRestoration />
                 <Scripts />
