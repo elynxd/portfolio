@@ -2,20 +2,20 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export default function About() {
     return (
-        <div className="container mx-auto bg-gray-900 p-4 text-white">
-            <h1 className="mb-8 text-center font-bold text-4xl">About Me</h1>
+        <div className="container mx-auto pt-24 text-white">
+            <h1 className="mb-8 text-center font-bold text-4xl tracking-wide">Sobre mim</h1>
             <div className="grid grid-cols-1 gap-8 align-baseline md:grid-cols-1">
                 <div>
-                    <h2 className="mb-4 font-bold text-2xl">Who I Am</h2>
+                    <h2 className="mb-4 font-bold text-2xl">Quem Sou Eu</h2>
                     <p>
-                        I am a passionate DevOps and Developer with a love for building and
-                        deploying scalable and reliable web applications. I have experience in all
-                        aspects of the software development lifecycle, from planning and design to
-                        implementation and deployment.
+                        Sou um DevOps e Desenvolvedor apaixonado, com amor por construir e implantar
+                        aplicações web escaláveis e confiáveis. Tenho experiência em todos os
+                        aspectos do ciclo de vida do desenvolvimento de software, desde o
+                        planejamento e design até a implementação e implantação.
                     </p>
                 </div>
                 <div>
-                    <h2 className="mb-4 font-bold text-2xl">My Skills</h2>
+                    <h2 className="mb-4 font-bold text-2xl">Minhas Habilidades</h2>
                     <div className="grid grid-cols-3 gap-4">
                         <Card>
                             <CardHeader>

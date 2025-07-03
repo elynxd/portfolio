@@ -29,8 +29,8 @@ const projects = [
 
 export default function Projects() {
     return (
-        <div className="container mx-auto bg-gray-900 p-4 text-white">
-            <h1 className="mb-8 text-center font-bold text-4xl">Projects</h1>
+        <div className="container mx-auto pt-24 text-white">
+            <h1 className="mb-8 text-center font-bold text-4xl tracking-wide">Projetos</h1>
             <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
                 {projects.map(project => (
                     <Card key={project.id}>
