@@ -1,0 +1,76 @@
+name: Deploy to Production
+
+on:
+  pull_request:
+    types: [assigned]
+    branches:
+      - main
+
+jobs:
+  deploy:
+    if: github.event.pull_request.state == 'approved'
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build Docker image for ARM64
+        run: |
+          docker buildx build \
+            --platform linux/arm64 \
+            --load \
+            -t website_portfolio:${{ github.sha }} .
+          docker save website_portfolio:${{ github.sha }} -o website_portfolio.tar
+
+      - name: Copy Docker Image to Oracle Instance
+        uses: appleboy/scp-action@v1
+        with:
+          host: ${{ secrets.ORACLE_HOST }}
+          username: ${{ secrets.ORACLE_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.ORACLE_PORT }}
+          source: "website_portfolio.tar"
+          target: "/home/${{ secrets.ORACLE_USERNAME }}/myapps/"
+
+      - name: Setup SSH for deployment with zero downtime
+        uses: appleboy/ssh-action@v1.2.2
+        with:
+          host: ${{ secrets.ORACLE_HOST }}
+          username: ${{ secrets.ORACLE_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.ORACLE_PORT }}
+          script: |
+            # Load the new image
+            docker load -i /home/${{ secrets.ORACLE_USERNAME }}/myapps/website_portfolio.tar
+
+            # Tag as latest for easier management
+            docker tag website_portfolio:${{ github.sha }} website_portfolio:latest
+
+            # Check if container exists and is running
+            if [ $(docker ps -q -f name=website_portfolio) ]; then
+              # Zero-downtime deployment: start new container on different port
+              docker run -d --name website_portfolio_new -p 8080:80 website_portfolio:latest
+              
+              # Wait for new container to be ready (adjust as needed)
+              sleep 10
+              
+              # Switch ports and remove old container
+              docker stop website_portfolio
+              docker rm website_portfolio
+              docker run -d --name website_portfolio -p 80:80 website_portfolio:latest
+              docker stop website_portfolio_new
+              docker rm website_portfolio_new
+            else
+              # First deployment
+              docker run -d --name website_portfolio -p 80:80 website_portfolio:latest
+            fi
+
+            # Cleanup old images (keep last 3)
+            docker images website_portfolio --format "table {{.ID}}\t{{.CreatedAt}}" | tail -n +4 | awk '{print $1}' | xargs -r docker rmi
+
+            # Remove the tar file
+            rm -f /home/${{ secrets.ORACLE_USERNAME }}/myapps/website_portfolio.tar
