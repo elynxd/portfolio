@@ -52,20 +52,44 @@ jobs:
             # Check if container exists and is running
             if [ $(docker ps -q -f name=website_portfolio) ]; then
               # Zero-downtime deployment: start new container on different port
-              docker run -d --name website_portfolio_new -p 8080:80 website_portfolio:latest
-              
-              # Wait for new container to be ready (adjust as needed)
-              sleep 10
-              
-              # Switch ports and remove old container
+              docker run -d --name website_portfolio_new -p 3001:3000 -e HOST=0.0.0.0 -e PORT=3000 website_portfolio:latest
+
+            # Wait for new container to be ready
+            sleep 10
+
+            # Test if new container is working
+            if curl -f http://localhost:3001; then
+              # Switch: stop old container and start new one on port 3000
               docker stop website_portfolio
               docker rm website_portfolio
-              docker run -d --name website_portfolio -p 80:80 website_portfolio:latest
+              docker run -d --name website_portfolio -p 3000:3000 -e HOST=0.0.0.0 -e PORT=3000 website_portfolio:latest
+
+              # Clean up temporary container
               docker stop website_portfolio_new
               docker rm website_portfolio_new
+
+              echo "✅ Zero-downtime deployment successful"
+            else
+                # Rollback: remove failed container
+                docker stop website_portfolio_new
+                docker rm website_portfolio_new
+                echo "❌ New container failed health check, keeping old version"
+                exit 1
+              fi
             else
               # First deployment
-              docker run -d --name website_portfolio -p 80:80 website_portfolio:latest
+              docker run -d --name website_portfolio -p 3000:3000 -e HOST=0.0.0.0 -e PORT=3000 website_portfolio:latest
+              echo "✅ First deployment successful"
+            fi
+
+            # Verify final deployment
+            sleep 5
+            if curl -f http://localhost:3000; then
+              echo "🌐 App is running at: http://$(curl -s ifconfig.me):3000"
+            else
+              echo "❌ Final health check failed"
+              docker logs website_portfolio
+              exit 1
             fi
 
             # Cleanup old images (keep last 3)
