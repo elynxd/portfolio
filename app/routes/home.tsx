@@ -16,7 +16,7 @@ export default function Home() {
                 >
                     <GradientText animationSpeed={8}>
                         <h1 className="z-20 font-bold text-4xl tracking-wide md:text-5xl">
-                            Hello, I'm a Solutions Architecture, Software Engineer and DevOps
+                            Hello, I'm a Solutions Architect, Software Engineer and DevOps
                             engineer.
                         </h1>
                     </GradientText>
