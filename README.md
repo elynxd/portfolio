@@ -21,7 +21,7 @@ A modern, production-ready template for building full-stack React applications u
 Install the dependencies:
 
 ```bash
-npm install
+pnpm install
 ```
 
 ### Development
@@ -29,7 +29,7 @@ npm install
 Start the development server with HMR:
 
 ```bash
-npm run dev
+pnpm dev
 ```
 
 Your application will be available at `http://localhost:5173`.
@@ -39,7 +39,7 @@ Your application will be available at `http://localhost:5173`.
 Create a production build:
 
 ```bash
-npm run build
+pnpm build
 ```
 
 ## Deployment
@@ -49,26 +49,28 @@ npm run build
 To build and run using Docker:
 
 ```bash
-docker build -t my-app .
+docker build -t portfolio .
 
 # Run the container
-docker run -p 3000:3000 my-app
+docker run -p 3000:3000 portfolio
 ```
 
 The containerized application can be deployed to any platform that supports Docker, including:
 
+- AWS EC2
 - AWS ECS
 - Google Cloud Run
 - Azure Container Apps
 - Digital Ocean App Platform
 - Fly.io
 - Railway
+- Oracle OCI Instances
 
 ### DIY Deployment
 
 If you're familiar with deploying Node applications, the built-in app server is production-ready.
 
-Make sure to deploy the output of `npm run build`
+Make sure to deploy the output of `pnpm build`
 
 ```
 ├── package.json
@@ -84,4 +86,4 @@ This template comes with [Tailwind CSS](https://tailwindcss.com/) already config
 
 ---
 
-Built with ❤️ using React Router.
+Built my portfolio with ❤️ using React Router.
