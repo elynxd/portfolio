@@ -5,9 +5,10 @@ import { Button } from "@/components/ui/button";
 const projects = [
     {
         id: 1,
-        title: "Project 1",
-        description: "A brief description of the project.",
-        image: "https://via.placeholder.com/300",
+        title: "Connect Consultoria",
+        description:
+            "A new Website to Connect Consultoria with modern design, focused on user experience, accessibility, and performance.",
+        image: "https://www.connectconsultoria.com.br/Admin/api/data/imagem/uploads/entrada/logo-558738016.png",
         liveUrl: "#",
         sourceUrl: "#",
     },
@@ -31,7 +32,7 @@ export default function Projects() {
     return (
         <div className="container mx-auto pt-24 text-white">
             <h1 className="mb-8 text-center font-bold text-4xl tracking-wide">Projetos</h1>
-            <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+            <div className="grid grid-cols-1 gap-8 p-4 md:grid-cols-2 lg:grid-cols-3">
                 {projects.map(project => (
                     <Card key={project.id}>
                         <CardHeader>
